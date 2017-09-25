@@ -45,7 +45,16 @@ COPY chrome-repo /etc/yum.repos.d/google-chrome.repo
 
 RUN yum  -y install google-chrome-stable 
 
-CMD ["php-fpm","-F"]
+#CMD ["php-fpm","-F"]
 
+# Add chrome user
+RUN groupadd -r chrome && useradd -r -g chrome -G audio,video chrome \
+    && mkdir -p /home/chrome/Downloads && chown -R chrome:chrome /home/chrome
+
+
+# Run Chrome as non privileged user
+USER chrome
+
+CMD ["google-chrome"]
 
 
